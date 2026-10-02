@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOL 看板 · Violoop 种子体验官</title>
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>KOL 看板</h1>
+    <p class="sub">种子体验官（KOL）寄件与素材交付全流程 · 线上静态版 · 数据存在你本机浏览器</p>
+  </div>
+  <div class="top-actions">
+    <span id="saveState" class="save-state" title="保存 = 存入本机浏览器（不上传）">未改动</span>
+    <button id="btnSave" class="primary">保存</button>
+    <button id="btnReload">重置为线上数据</button>
+  </div>
+</header>
+
+<div id="dataStateBanner" class="banner"></div>
+
+<section class="batchbar">
+  <div class="batch-grid" id="batchGrid"></div>
+</section>
+
+<section class="kpis" id="kpis"></section>
+
+<details class="env" id="envBox">
+  <summary>外部环境（寄件当天请再复核一遍）</summary>
+  <div class="env-table" id="envTable"></div>
+  <p class="src" id="envSource"></p>
+</details>
+
+<section class="toolbar">
+  <div class="views" role="tablist">
+    <button class="view-btn active" data-view="board">看板</button>
+    <button class="view-btn" data-view="table">表格</button>
+  </div>
+  <input id="q" type="search" placeholder="搜索 KOL / 平台 / 国家 / 备注">
+  <select id="fPlatform"><option value="">全部平台</option></select>
+  <select id="fWave"><option value="">全部波次</option></select>
+  <select id="fStage"><option value="">全部阶段</option></select>
+  <label class="chk"><input type="checkbox" id="fBlocked"> 只看有阻断项</label>
+  <span class="spacer"></span>
+  <button id="btnAdd">新增 KOL</button>
+  <button id="btnImport">导入 CSV</button>
+  <button id="btnExport">导出 CSV</button>
+  <input type="file" id="fileCsv" accept=".csv,text/csv" hidden>
+</section>
+
+<main id="board" class="board"></main>
+
+<section id="tableWrap" class="table-wrap" hidden>
+  <table id="tbl">
+    <thead><tr>
+      <th data-sort="name">KOL / 频道</th>
+      <th data-sort="platform">平台</th>
+      <th data-sort="followers" class="num">粉丝</th>
+      <th data-sort="avg_views_30d" class="num">近30天均播</th>
+      <th data-sort="country">国家</th>
+      <th data-sort="wave">波次</th>
+      <th data-sort="stage">阶段</th>
+      <th>阻断项</th>
+      <th data-sort="nda_signed">NDA</th>
+      <th>下一步</th>
+      <th class="ops">操作</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</section>
+
+<footer class="foot" id="foot"></footer>
+
+<aside id="drawer" class="drawer" hidden>
+  <div class="drawer-head">
+    <strong id="drawerTitle">编辑</strong>
+    <button id="btnCloseDrawer">关闭</button>
+  </div>
+  <form id="form" class="form"></form>
+</aside>
+
+<script>/* 线上初始数据（发布快照）；改动只存本机浏览器 */
+window.__KB_DATA__ = {"meta":{"title":"KOL 看板","subtitle":"种子体验官（KOL）寄件与素材交付全流程","updated_at":"2026-10-03T02:20:00+08:00","schema_source":"/Users/mac/outputs/violoop-seed-kol-kit/01_内部_设备寄出前自检表_v2.0_2026-10-02.md §2 单台档案","data_state":"example","data_state_note":"当前 6 行为示例骨架：人物字段一律为「待填」，只填了会触发规则的结构字段（波次/国家/NDA/自检），用于验证看板与阻断逻辑。导入真实名单后请把 data_state 改为 live。","batch":{"code":"SEED-2026-11-A","plan_ship_date":"","carrier":"","units":0,"owner":"","embargo_date":"","guide_version":"02_外部_新手指南_v2.0_2026-10-02","cert_ce":"pending","cert_fcc":"pending"},"env":[{"label":"众筹","value":"Kickstarter 已上线（live）；2026-10-02 实时 3,707 名支持者 / HK$15,644,728（≈ US$1.99M）；2026-10-31 收官","impact":"KOL 一查就知道；任何「已上市 / 现货 / 立即发货」的说法都是错的"},{"label":"发货节奏","value":"尚未发货。Wave 1（US/CA/AU/NZ/SG/HK）预计 2026-11 起；Wave 2（UK/EU/CH/NO）待 CE（含 EN 18031）完成","impact":"Wave 2 国家的 KOL 寄出日与广告诉求都要另议"},{"label":"认证","value":"CE（含 EN 18031）与 FCC 进行中；首批已量产，等认证通过后滚动发出","impact":"未取得目标市场认证的设备不得寄出（一票否决）"},{"label":"运税费","value":"官方对支持者免运费；Wave 1/Wave 2 国家由 BVIO 承担进口关税与税，DDP 名单见官网 /shipping","impact":"种子设备若走商用物流，务必与官方口径区分，别让 KOL 误以为「已经发货了」"},{"label":"支持承诺","value":"官网原文 \"we aim to respond\"，工作日 48 小时内回应（是目标不是硬承诺）","impact":"对 KOL 可承诺更快的种子用户 SLA，但别把官网口径写成 24 小时"}],"env_source":"01_内部_设备寄出前自检表_v2.0_2026-10-02.md §0.1（实抓日 2026-10-02）"},"kols":[{"id":"ex-01","example":true,"name":"示例 KOL 01（待替换）","platform":"YouTube","url":"","followers":0,"avg_views_30d":0,"content_type":"长评测","country":"美国","city":"","wave":"Wave 1","timezone":"","receiving_language":"英文","computer":"待填","displays":"待填","need_splitter":false,"nda_signed":true,"nda_ref":"","serial":"","stage":"outreach","checklist":"not_started","deliverable_url":"","owner":"","next_action":"发首封邀请（用 creator outreach 模板 v2.0）","next_due":"","notes":"示例行：演示「已签 NDA、Wave 1」的正常推进路径"},{"id":"ex-02","example":true,"name":"示例 KOL 02（待替换）","platform":"Instagram","url":"","followers":0,"avg_views_30d":0,"content_type":"短视频","country":"德国","city":"","wave":"Wave 2","timezone":"","receiving_language":"英文","computer":"Windows","displays":"待填","need_splitter":false,"nda_signed":false,"nda_ref":"","serial":"","stage":"preship","checklist":"in_progress","deliverable_url":"","owner":"","next_action":"先确认 CE（含 EN 18031）状态，未通过不得寄出","next_due":"","notes":"示例行：Wave 2 + CE 未通过 → 触发一票否决阻断"},{"id":"ex-03","example":true,"name":"示例 KOL 03（待替换）","platform":"TikTok","url":"","followers":0,"avg_views_30d":0,"content_type":"短视频","country":"英国","city":"","wave":"Wave 2","timezone":"","receiving_language":"英文","computer":"macOS","displays":"待填","need_splitter":true,"nda_signed":false,"nda_ref":"","serial":"","stage":"legal","checklist":"not_started","deliverable_url":"","owner":"","next_action":"补签 NDA + 素材授权，再谈寄件","next_due":"","notes":"示例行：NDA 未签 → 阻断；需分线器附件 → 包装清单走 §5"},{"id":"ex-04","example":true,"name":"示例 KOL 04（待替换）","platform":"Bilibili","url":"","followers":0,"avg_views_30d":0,"content_type":"直播","country":"中国大陆","city":"","wave":"其他","timezone":"Asia/Shanghai","receiving_language":"中文","computer":"Windows","displays":"待填","need_splitter":false,"nda_signed":true,"nda_ref":"","serial":"","stage":"shipped","checklist":"passed","deliverable_url":"","owner":"","next_action":"跟踪签收，收机后 48 小时内陪跑第一次跑通","next_due":"","notes":"示例行：自检通过 + 已寄出"},{"id":"ex-05","example":true,"name":"示例 KOL 05（待替换）","platform":"YouTube","url":"","followers":0,"avg_views_30d":0,"content_type":"长评测","country":"加拿大","city":"","wave":"Wave 1","timezone":"","receiving_language":"英文","computer":"macOS","displays":"待填","need_splitter":false,"nda_signed":true,"nda_ref":"","serial":"","stage":"filming","checklist":"passed","deliverable_url":"","owner":"","next_action":"按 §8 拍摄要求催素材；检查横版主片 + 竖版短片","next_due":"","notes":"示例行：已收机、拍摄中，素材规格见新手指南 §8.3"},{"id":"ex-06","example":true,"name":"示例 KOL 06（待替换）","platform":"X","url":"","followers":0,"avg_views_30d":0,"content_type":"图文","country":"新加坡","city":"","wave":"Wave 1","timezone":"","receiving_language":"英文","computer":"macOS","displays":"待填","need_splitter":false,"nda_signed":true,"nda_ref":"","serial":"","stage":"live","checklist":"passed","deliverable_url":"","owner":"","next_action":"记录上线链接与首 72 小时数据，进入复盘","next_due":"","notes":"示例行：成片已上线"}]};</script>
+<script src="./core.js"></script>
+<script src="./render.js"></script>
+<script src="./ui.js"></script>
+</body>
+</html>
